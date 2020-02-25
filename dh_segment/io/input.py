@@ -1,5 +1,6 @@
 from glob import glob
 import os
+import warnings
 import tensorflow as tf
 import numpy as np
 from .. import utils
@@ -10,6 +11,7 @@ import pandas as pd
 from .input_utils import data_augmentation_fn, extract_patches_fn, load_and_resize_image, \
     rotate_crop, resize_image, local_entropy
 
+IMAGE_FILENAME_MASKS = ('*.jpg', '*.jpeg', '*.png', '*.tif')
 
 class InputCase(Enum):
     INPUT_LIST = 'INPUT_LIST'
@@ -22,7 +24,7 @@ def input_fn(input_data: Union[str, List[str]], params: dict, input_label_dir: s
              num_threads: int=4, image_summaries: bool=False):
     """
     Input_fn for estimator
-    
+
     :param input_data: input data. It can be a directory containing the images, it can be
         a list of image filenames, or it can be a path to a csv file.
     :param params: params from utils.Params object
@@ -115,6 +117,8 @@ def input_fn(input_data: Union[str, List[str]], params: dict, input_label_dir: s
     # ---
 
     # Finding the list of images to be used
+    input_image_filenames = []
+    label_image_filenames = []
     if isinstance(input_data, list):
         input_case = InputCase.INPUT_LIST
         input_image_filenames = input_data
@@ -136,6 +140,8 @@ def input_fn(input_data: Union[str, List[str]], params: dict, input_label_dir: s
 
     # Finding the list of labelled images if available
     has_labelled_data = False
+    input_images_with_no_label = set()
+
     if input_label_dir and input_case in [InputCase.INPUT_LIST, InputCase.INPUT_DIR]:
         label_image_filenames = []
         for input_image_filename in input_image_filenames:
@@ -146,6 +152,11 @@ def input_fn(input_data: Union[str, List[str]], params: dict, input_label_dir: s
                 label_image_filename = os.path.join(input_label_dir, filename + new_extension)
             label_image_filenames.append(label_image_filename)
         has_labelled_data = True
+        # Remove input images with no labels from files list
+        input_image_filenames = [
+            f for f in input_image_filenames
+            if f not in input_images_with_no_label
+        ]
 
     # Read image filenames and labels in case of csv file
     if input_case == InputCase.INPUT_CSV:

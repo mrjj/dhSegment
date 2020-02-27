@@ -182,7 +182,7 @@ def cbad_set_generator(input_dir: str,
     """
 
     # Get image filenames to process
-    image_filenames_list = glob('{}/**/*.jpg'.format(input_dir))
+    image_filenames_list = glob('{}/**/*.jp*g'.format(input_dir))
 
     # set
     os.makedirs(os.path.join('{}'.format(output_dir), 'images'))

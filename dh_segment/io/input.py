@@ -126,7 +126,7 @@ def input_fn(input_data: Union[str, List[str]], params: dict, input_label_dir: s
 
     elif os.path.isdir(input_data):
         input_case = InputCase.INPUT_DIR
-        input_image_filenames = glob(os.path.join(input_data, '**', '*.jpg'),
+        input_image_filenames = glob(os.path.join(input_data, '**', '*.jp*g'),
                                      recursive=True) + \
                                 glob(os.path.join(input_data, '**', '*.png'),
                                      recursive=True)
@@ -148,8 +148,10 @@ def input_fn(input_data: Union[str, List[str]], params: dict, input_label_dir: s
             label_image_filename = os.path.join(input_label_dir, os.path.basename(input_image_filename))
             if not os.path.exists(label_image_filename):
                 filename, extension = os.path.splitext(os.path.basename(input_image_filename))
-                new_extension = '.png' if extension == '.jpg' else '.jpg'
+                new_extension = '.png' if extension in {'.jpg', '.jpeg'} else '.jpg'
                 label_image_filename = os.path.join(input_label_dir, filename + new_extension)
+                if not os.path.exists(label_image_filename):
+                    input_images_with_no_label.add(input_image_filename)
             label_image_filenames.append(label_image_filename)
         has_labelled_data = True
         # Remove input images with no labels from files list

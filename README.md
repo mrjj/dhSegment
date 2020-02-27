@@ -14,6 +14,12 @@ It was created by [Benoit Seguin](https://twitter.com/Seguin_Be) and Sofia Ares 
 The [installation procedure](https://dhsegment.readthedocs.io/en/latest/start/install.html) 
 and examples of usage can be found in the documentation (see section below).
 
+Third parties with matching verisons:
+
+* [CuDNN](https://developer.nvidia.com/cudnn)
+* [CUDA Toolkit 10.0.1](https://developer.nvidia.com/cuda-10.0-download-archive?)
+* [Tensorflow 1.13.1 with GPU/CUDA support](https://anaconda.org/conda-forge/tensorflow/files?version=1.13.1)
+
 ## Demo
 Have a try at the [demo](https://dhsegment.readthedocs.io/en/latest/start/demo.html) to train (optional) and apply dhSegment in page extraction using the `demo.py` script.
 

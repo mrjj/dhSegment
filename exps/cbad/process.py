@@ -34,7 +34,7 @@ def prediction_fn(model_dir: str,
         output_dir = '{}'.format(os.path.sep).join(model_dir.split(os.path.sep)[:-3] + ['predictions'])
 
     os.makedirs(output_dir, exist_ok=True)
-    filenames_to_predict = glob(os.path.join(input_dir, '*.jpg')) + glob(os.path.join(input_dir, '*.png'))
+    filenames_to_predict = glob(os.path.join(input_dir, '*.jp*g')) + glob(os.path.join(input_dir, '*.png'))
 
     with tf.Session(config=config):
         m = LoadedModel(model_dir, predict_mode='filename_original_shape')

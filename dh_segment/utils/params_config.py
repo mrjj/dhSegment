@@ -118,6 +118,7 @@ class ModelParams(BaseParams):
             model_class = VGG16ModelParams
         elif self.pretrained_model_name == 'resnet50':
             model_class = ResNetModelParams
+            self.correct_resnet_version = kwargs.get('correct_resnet_version', model_class.CORRECT_VERSION)
         elif self.pretrained_model_name == 'unet':
             model_class = UNetModelParams
         else:
@@ -127,7 +128,6 @@ class ModelParams(BaseParams):
         self.intermediate_conv = kwargs.get('intermediate_conv', model_class.INTERMEDIATE_CONV)
         self.upscale_params = kwargs.get('upscale_params', model_class.UPSCALE_PARAMS)
         self.selected_levels_upscaling = kwargs.get('selected_levels_upscaling', model_class.SELECTED_LAYERS_UPSCALING)
-        self.correct_resnet_version = kwargs.get('correct_resnet_version', model_class.CORRECT_VERSION)
         self.check_params()
 
     def check_params(self):
